@@ -3,7 +3,6 @@ https://wiki.c2b2.columbia.edu/systems/index.php/Documentation/HPC_cluster
 
 # ssh
 ssh -X jep2111@login.c2b2.columbia.edu
-Psnr1051!@#
 
 # prerequisite
 https://support.apple.com/en-us/HT201341
