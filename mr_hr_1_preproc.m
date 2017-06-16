@@ -1,4 +1,4 @@
-function monk_mrtrix_1_preproc(order)
+function mr_hr_1_preproc(order)
 
 %------------ FreeSurfer -----------------------------%
 fshome = getenv('FREESURFER_HOME');
