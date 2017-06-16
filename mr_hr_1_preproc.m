@@ -49,8 +49,8 @@ img_dwi=out(1:length(out)-1)
 
 
 C=regexp(dwiname{1},'[.]','split')
-img_bvecs=fullfile(pwd,[C{1} '.bvecs'])
-img_bvals=fullfile(pwd,[C{1} '.bvals'])
+img_bvecs=fullfile(pwd,'bvecs')
+img_bvals=fullfile(pwd,'bvals')
 
 
   if ~exist('mr_fod.mif.gz')
