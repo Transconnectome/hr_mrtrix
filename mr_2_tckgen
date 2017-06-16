@@ -73,10 +73,15 @@ cd $monk/data/${s}/DTI
 #gzip -d -f -v mr_fod.mif.gz
 
 
+#tckgen WM_FODs.mif 100M.tck -act 5TT.mif -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif -maxlength 250 -select 100M -cutoff 0.06
+
+
 #dwi2fod csd mr_dwi_denoised_preproc_biasCorr_reduced.mif* ../../group_average_response.txt mr_fod_group_response.mif.gz -mask mr_dilate_mask.mif -force
 if [ -e mr_fod_5M_SIFT.tck ] ; then echo SIFT is already done
-else tckgen mr_fod.mif.gz mr_fod_tckgen_100M.tck -seed_image mr_parcels.mif* -mask lowb_brain_mask.nii.gz -number 100M -maxlength 100 -force -nthreads 12 && echo tckgen done***************
-tcksift mr_fod_tckgen_100M.tck mr_fod.mif.gz mr_fod_5M_SIFT.tck -term_number 5M -force -nthreads 12 && echo sift done*******
+else tckgen WM_FODs.mif.gz mr_fod_tckgen_10M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -minlength 30 -select 10M -cutoff 0.06 -force -nthreads 1
+
+#-seed_image mr_parcels.mif* -mask lowb_brain_mask.nii.gz -number 100M -maxlength 100 -force -nthreads 12 && echo tckgen done***************
+#tcksift mr_fod_tckgen_100M.tck mr_fod.mif.gz mr_fod_5M_SIFT.tck -term_number 5M -force -nthreads 12 && echo sift done*******
 fi 
 
 if [ -e mr_fod_5M_SIFT.tck ] ; then rm mr_fod_tckgen_100M.tck 
