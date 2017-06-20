@@ -73,7 +73,7 @@ cd $monk/data/${s}/DTI
 #gzip -d -f -v mr_fod.mif.gz
 
 
-#tckgen WM_FODs.mif 100M.tck -act 5TT.mif -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif -maxlength 250 -select 100M -cutoff 0.06
+tckgen WM_FODs.mif 1M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif -maxlength 250 -select 1M
 
 
 #dwi2fod csd mr_dwi_denoised_preproc_biasCorr_reduced.mif* ../../group_average_response.txt mr_fod_group_response.mif.gz -mask mr_dilate_mask.mif -force
