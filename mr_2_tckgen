@@ -1,16 +1,16 @@
 #! /bin/bash
 #cd $monk/analysis/newstr/roi
-mkdir $monk/data/cmd
+#mkdir $monk/data/cmd
 #rm $monk/data/cmd/cmd2_*
-rm $monk/data/cmd/jobid
+#rm $monk/data/cmd/jobid
 #cd $monk/analysis/newstr/roi
 
-for s in 10062; do # `cat /ifs/scratch/pimri/posnerlab/1anal/Monk/data/run8`; do
+for s in 10398; do # `cat /ifs/scratch/pimri/posnerlab/1anal/Monk/data/run8`; do
 
 #if [ ! -e $monk/analysis/dti/${s}/dmri/roi/infant-neo-aal_warped_diff.nii.gz ]; then 
-template=$monk/template/infant-neo-withCerebellum.nii
-ref=$template
-vbm=/ifs/scratch/pimri/posnerlab/1anal/Monk/analysis/newstr/vbm/struc
+#template=$monk/template/infant-neo-withCerebellum.nii
+#ref=$template
+#vbm=/ifs/scratch/pimri/posnerlab/1anal/Monk/analysis/newstr/vbm/struc
 #echo "cd $monk/analysis/dti/${s}/dmri && flirt -ref $template -in ../*brain.nii.gz -omat str2mni.mat && convert_xfm -omat mni2str.mat -inverse str2mni.mat" >> $monk/cmd    
 
 
@@ -22,7 +22,7 @@ echo NOW WARPING FOR SUBJECT ${s}
 #ref=/ifs/scratch/pimri/posnerlab/1anal/Monk/template/infant-neo-withCerebellum.nii
 
 
-cd $monk/data/${s}/DTI
+cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
 
 ### FREE UP SOME SPACE
 
@@ -74,7 +74,7 @@ cd $monk/data/${s}/DTI
 #gzip -d -f -v mr_fod.mif.gz
 
 
-tckgen WM_FODs.mif 1M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif -maxlength 250 -select 1M
+tckgen WM_FODs.mif.gz 1M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -select 1M
 
 
 #dwi2fod csd mr_dwi_denoised_preproc_biasCorr_reduced.mif* ../../group_average_response.txt mr_fod_group_response.mif.gz -mask mr_dilate_mask.mif -force
