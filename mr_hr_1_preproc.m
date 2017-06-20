@@ -113,11 +113,11 @@ unix(cmd)
 
 
 %% 5TTGEN
-%unix('mri_convert ../mri/T1.mgz tmp.nii.gz')  
-%unix('flip4fsl tmp.nii.gz T1_flip.nii.gz')
-%unix('5ttgen fsl T1_flip.nii.gz 5tt.mif.gz -force')
-%unix('mrconvert mr_meanb0.mif.gz mr_meanb0.nii.gz')
-%unix('flirt -in T1_flip.nii.gz -out T1_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat')
+unix('mri_convert ../mri/T1.mgz tmp.nii.gz')  
+unix('flip4fsl tmp.nii.gz T1_flip.nii.gz')
+unix('5ttgen freesurfer T1_flip.nii.gz 5tt.mif.gz -force')
+unix('mrconvert mr_meanb0.mif.gz mr_meanb0.nii.gz')
+unix('flirt -in T1_flip.nii.gz -out T1_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat')
 
 %% FOD%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % make sure to use "DILATED MASK" for FOD generation
