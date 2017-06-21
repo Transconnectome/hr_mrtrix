@@ -119,7 +119,7 @@ unix('mrconvert mr_meanb0.mif.gz mr_meanb0.nii.gz')
 unix('flirt -in T1_flip.nii.gz -out T1_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -v')
 unix('5ttgen freesurfer T1_flip.nii.gz 5tt.mif.gz -force')
 unix('mrconvert 5tt.mif.gz 5tt.nii.gz -force')
-unix('flirt -in 5tt.nii.gz -out 5tt_diff -ref mr_meanb0 -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -v')
+unix('flirt -in 5tt.nii.gz -out 5tt_diff -ref mr_meanb0 -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -interp nearestneighbour -v')
 
 
 %% FOD%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
