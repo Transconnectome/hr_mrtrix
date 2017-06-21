@@ -75,7 +75,7 @@ cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
 
 
 tckgen WM_FODs.mif.gz 1M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -select 1M
-
+# 5tt2gmwmi: Produces a mask image suitable for seeding streamlines from the grey matter - white matter interface (GMWMI). The resulting image should then be provided to the tckgen command using the -seed_gmwmi option.
 
 #dwi2fod csd mr_dwi_denoised_preproc_biasCorr_reduced.mif* ../../group_average_response.txt mr_fod_group_response.mif.gz -mask mr_dilate_mask.mif -force
 if [ -e mr_fod_5M_SIFT.tck ] ; then echo SIFT is already done
