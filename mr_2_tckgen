@@ -13,6 +13,23 @@ for s in 10398; do # `cat /ifs/scratch/pimri/posnerlab/1anal/Monk/data/run8`; do
 #vbm=/ifs/scratch/pimri/posnerlab/1anal/Monk/analysis/newstr/vbm/struc
 #echo "cd $monk/analysis/dti/${s}/dmri && flirt -ref $template -in ../*brain.nii.gz -omat str2mni.mat && convert_xfm -omat mni2str.mat -inverse str2mni.mat" >> $monk/cmd    
 
+### 5TTGEN
+cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
+CMD=cmd.5ttgen
+rf -rf $CMD
+echo "#!/bin/bash
+source ~/.bashrc
+mri_convert ../mri/T1.mgz tmp.nii.gz
+flip4fsl tmp.nii.gz T1_flip.nii.gz
+mrconvert mr_meanb0.mif.gz mr_meanb0.nii.gz
+flirt -in T1_flip.nii.gz -out T1_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -v
+5ttgen fsl T1_flip.nii.gz 5tt.mif.gz -force
+mrconvert 5tt.mif.gz 5tt.nii.gz -force
+flirt -in 5tt.nii.gz -out 5tt_diff -ref mr_meanb0 -applyxfm \
+-init ../dmri/xfms/anat2diff.flt.mat -interp nearestneighbour -v" >$CMD
+prepid=`$code/fsl_sub_hpc_6 $CMD`
+
+
 
 echo "#!/bin/bash
 source ~/.bashrc
@@ -102,7 +119,7 @@ echo END OF TCKGEN AND SIFT
 " > $monk/data/cmd/cmd2_${s}
 
 chmod +x $monk/data/cmd/cmd2_${s}
-$code/fsl_sub_hpc_6 -s smp,12 -j 6383341 $monk/data/cmd/cmd2_${s} 
+$code/fsl_sub_hpc_6 -s smp,12 -j $prepid $monk/data/cmd/cmd2_${s} 
 #$code/fsl_sub_hpc_36 $monk/data/cmd/cmd2_${s}  
 #echo $jobid >> $monk/data/cmd/jobid
 
