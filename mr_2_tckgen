@@ -15,7 +15,7 @@ for s in 10398; do # `cat /ifs/scratch/pimri/posnerlab/1anal/Monk/data/run8`; do
 
 ### 5TTGEN
 cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
-CMD=cmd.5ttgen
+CMD=$hr/fs/log_mr/cmd.5ttgen.${s}
 rf -rf $CMD
 echo "#!/bin/bash
 source ~/.bashrc
@@ -30,6 +30,8 @@ mrconvert 5tt.mif.gz 5tt.nii.gz -force
 prepid=`$code/fsl_sub_hpc_6 -l $hr/fs/log_mr $CMD`
 
 
+CMD=$hr/fs/log_mr/cmd.tckgensift.${s}
+rf -rf $CMD
 
 echo "#!/bin/bash
 source ~/.bashrc
@@ -92,19 +94,19 @@ cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
 
 
 
-tckgen WM_FODs.mif.gz 1M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -rk4 -seed_dynamic WM_FODs.mif.gz -maxlength 250 -number 1M -force -nthreads 12
+#tckgen WM_FODs.mif.gz 1M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -rk4 -seed_dynamic WM_FODs.mif.gz -maxlength 250 -number 1M -force -nthreads 12
 
 
 #dwi2fod csd mr_dwi_denoised_preproc_biasCorr_reduced.mif* ../../group_average_response.txt mr_fod_group_response.mif.gz -mask mr_dilate_mask.mif -force
 if [ -e mr_fod_5M_SIFT.tck ] ; then echo SIFT is already done
-else tckgen WM_FODs.mif.gz mr_track_5M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -number 5M -force -nthreads 12
+else tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -number 100M -force -nthreads 12
 
 
 #-seed_image mr_parcels.mif* -mask lowb_brain_mask.nii.gz -number 100M -maxlength 100 -force -nthreads 12 && echo tckgen done***************
-tcksift -act 5tt.mif.gz mr_track_5M.tck WM_FODs.mif.gz mr_track_1M_SIFT.tck -term_number 1M -force -nthreads 12 && echo sift done*******
+tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads 12 && echo sift done*******
 fi 
 
-if [ -e mr_fod_5M_SIFT.tck ] ; then rm mr_fod_tckgen_100M.tck 
+if [ -e mr_track_1M_SIFT.tck ] ; then rm mr_track_5M.tck 
 else echo SIFT WAS NOT SUCCESSFUL
 fi
 
@@ -118,10 +120,10 @@ echo END OF TCKGEN AND SIFT
 
 #### GENERATING CONNECTOME
 
-" > $monk/data/cmd/cmd2_${s}
+" > $CMD
 
-chmod +x $monk/data/cmd/cmd2_${s}
-$code/fsl_sub_hpc_6 -s smp,12 -j $prepid -l $hr/fs/log_mr $monk/data/cmd/cmd2_${s} 
+chmod +x $CMD
+$code/fsl_sub_hpc_6 -s smp,12 -j $prepid -l $hr/fs/log_mr $CMD 
 #$code/fsl_sub_hpc_36 $monk/data/cmd/cmd2_${s}  
 #echo $jobid >> $monk/data/cmd/jobid
 
