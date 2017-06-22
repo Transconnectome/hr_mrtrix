@@ -23,11 +23,9 @@ mri_convert ../mri/T1.mgz tmp.nii.gz
 flip4fsl tmp.nii.gz T1_flip.nii.gz
 mrconvert mr_meanb0.mif.gz mr_meanb0.nii.gz
 flirt -in T1_flip.nii.gz -out T1_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -v
-5ttgen fsl T1_flip.nii.gz 5tt.mif.gz -force
-mrconvert 5tt.mif.gz 5tt.nii.gz -force
-flirt -in 5tt.nii.gz -out 5tt_diff -ref mr_meanb0 -applyxfm \
--init ../dmri/xfms/anat2diff.flt.mat -interp nearestneighbour -v" >$CMD
-prepid=`$code/fsl_sub_hpc_6 $CMD`
+5ttgen fsl T1_diff.nii.gz 5tt.mif.gz -force
+mrconvert 5tt.mif.gz 5tt.nii.gz -force" >$CMD
+prepid=`$code/fsl_sub_hpc_6 -l $hr/fs/log_mr $CMD`
 
 
 
@@ -91,7 +89,7 @@ cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
 #gzip -d -f -v mr_fod.mif.gz
 
 
-tckgen WM_FODs.mif.gz 1M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -select 1M
+tckgen WM_FODs.mif.gz 1M.tck -act 5tt_diff.nii.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -select 1M
 # 5tt2gmwmi: Produces a mask image suitable for seeding streamlines from the grey matter - white matter interface (GMWMI). The resulting image should then be provided to the tckgen command using the -seed_gmwmi option.
 
 #dwi2fod csd mr_dwi_denoised_preproc_biasCorr_reduced.mif* ../../group_average_response.txt mr_fod_group_response.mif.gz -mask mr_dilate_mask.mif -force
@@ -119,7 +117,7 @@ echo END OF TCKGEN AND SIFT
 " > $monk/data/cmd/cmd2_${s}
 
 chmod +x $monk/data/cmd/cmd2_${s}
-$code/fsl_sub_hpc_6 -s smp,12 -j $prepid $monk/data/cmd/cmd2_${s} 
+$code/fsl_sub_hpc_6 -s smp,12 -j $prepid -l $hr/fs/log_mr $monk/data/cmd/cmd2_${s} 
 #$code/fsl_sub_hpc_36 $monk/data/cmd/cmd2_${s}  
 #echo $jobid >> $monk/data/cmd/jobid
 
