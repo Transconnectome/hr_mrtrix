@@ -9,4 +9,4 @@
   done
   
   cat $CMD
-  $code/fsl_sub_hpc_6 -t $CMD
+  #$code/fsl_sub_hpc_6 -t $CMD
