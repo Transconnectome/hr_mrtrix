@@ -1,6 +1,10 @@
   #!/bin/bash
   # mr_hr_1_preproc_batch
+  
+  CMD=/ifs/scratch/pimri/posnerlab/1anal/highrisk/code/hr_mrtrix/job/cmd.batch.1_preproc
+  rm -rf $CMD
   for s in `seq 1 1 80`
   do
-  echo $code/fsl_sub_hpc_6 matlab -nojvm -nodesktop -r mr_hr_1_preproc(${order})
+  echo matlab -nojvm -nodesktop -r mr_hr_1_preproc(${order}) >> $CMD
   done
+
