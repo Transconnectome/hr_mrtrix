@@ -1,0 +1,6 @@
+  #!/bin/bash
+  # mr_hr_1_preproc_batch
+  for s in `seq 1 1 80`
+  do
+  echo $code/fsl_sub_hpc_6 mr_hr_1_preproc($s)
+  done
