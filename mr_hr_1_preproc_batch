@@ -5,6 +5,6 @@
   rm -rf $CMD
   for s in `seq 1 1 80`
   do
-  echo matlab -nojvm -nodesktop -r mr_hr_1_preproc(${order}) >> $CMD
+  echo "matlab -nojvm -nodesktop -r mr_hr_1_preproc(${order})" >> $CMD
   done
 
