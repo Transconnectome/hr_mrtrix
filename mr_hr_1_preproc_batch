@@ -2,6 +2,7 @@
   # mr_hr_1_preproc_batch
   
   CMD=/ifs/scratch/pimri/posnerlab/1anal/highrisk/code/hr_mrtrix/job/cmd.batch.1_preproc
+  jobfolder=/ifs/scratch/pimri/posnerlab/1anal/highrisk/code/hr_mrtrix/job
   rm -rf $CMD
   for order in `seq 1 1 80`
   do
@@ -9,5 +10,4 @@
   done
   
   cat $CMD
-  cd job
-  $code/fsl_sub_hpc -T 120 -M 12G -t $CMD
+  $code/fsl_sub_hpc -T 120 -M 12G -t $CMD -l $jobfolder
