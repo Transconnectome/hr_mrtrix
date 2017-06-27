@@ -98,7 +98,7 @@ cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
 
 
 #dwi2fod csd mr_dwi_denoised_preproc_biasCorr_reduced.mif* ../../group_average_response.txt mr_fod_group_response.mif.gz -mask mr_dilate_mask.mif -force
-if [ -e mr_fod_5M_SIFT.tck ] ; then echo SIFT is already done
+if [ -e mr_track_10M_SIFT.tck ] ; then echo SIFT is already done
 else tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -number 100M -force -nthreads 12
 
 
@@ -106,7 +106,7 @@ else tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at
 tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads 12 && echo sift done*******
 fi 
 
-if [ -e mr_track_1M_SIFT.tck ] ; then rm mr_track_5M.tck 
+if [ -e r_track_10M_SIFT.tck ] ; then rm mr_track_100M.tck 
 else echo SIFT WAS NOT SUCCESSFUL
 fi
 
