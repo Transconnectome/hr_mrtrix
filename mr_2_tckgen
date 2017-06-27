@@ -123,9 +123,10 @@ echo END OF TCKGEN AND SIFT
 " > $CMD
 
 chmod +x $CMD
-$code/fsl_sub_hpc_6 -s smp,12 -j $prepid -l $hr/fs/log_mr $CMD 
+#$code/fsl_sub_hpc_6 -s smp,12 -j $prepid -l $hr/fs/log_mr $CMD 
 #$code/fsl_sub_hpc_36 $monk/data/cmd/cmd2_${s}  
 #echo $jobid >> $monk/data/cmd/jobid
+$code/fsl_sub_hpc -T 2880 -M 6G -s smp,12 -j prepid -t $CMD -l $hr/fs/log_mr
 
   
 #fi
