@@ -9,4 +9,5 @@
   done
   
   cat $CMD
+  cd job
   $code/fsl_sub_hpc 1 12G -t $CMD
