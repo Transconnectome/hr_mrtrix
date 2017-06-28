@@ -34,8 +34,7 @@ labelconvert ../mri/aparc+aseg_orient_diffusion_1mm.nii.gz $FREESURFER_HOME/Free
 labelsgmfix nodes.mif.gz T1_diff.nii.gz fs_default.txt nodes_fixSGM.mif.gz -sgm_amyg_hipp -premasked -verbose -nthreads 12
 ############
 " >$CMD1
-prepid=`$code/fsl_sub_hpc_3 -l $hr/fs/log_mr -s smp,12 $CMD1`
-
+prepid=`$code/fsl_sub_hpc -T 60 -M 0.3G -l $hr/fs/log_mr -s smp,12 $CMD1`
 
 CMD2=$hr/fs/log_mr/cmd.tckgensift.${s}
 rm -rf $CMD2
