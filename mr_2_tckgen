@@ -99,7 +99,7 @@ cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
 
 #dwi2fod csd mr_dwi_denoised_preproc_biasCorr_reduced.mif* ../../group_average_response.txt mr_fod_group_response.mif.gz -mask mr_dilate_mask.mif -force
 if [ -e mr_track_10M_SIFT.tck ] ; then echo SIFT is already done
-else tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -number 100M -force -nthreads 12
+else tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -minlength 30 -number 100M -force -nthreads 12
 
 
 #-seed_image mr_parcels.mif* -mask lowb_brain_mask.nii.gz -number 100M -maxlength 100 -force -nthreads 12 && echo tckgen done***************
