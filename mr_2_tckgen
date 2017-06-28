@@ -27,9 +27,10 @@ flirt -in T1_flip.nii.gz -out T1_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -in
 mrconvert 5tt.mif.gz 5tt.nii.gz -force
 5tt2gmwmi 5tt.mif.gz 5tt_gmwmi_mask.mif.gz
 
+############
 labelconvert ../mri/aparc+aseg_orient_diffusion_1mm.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_default.txt nodes.mif.gz
-labelsgmfix nodes.mif.gz T1_diff.nii.gz fs_default.txt nodes_fixSGM.mif -sgm_amyg_hipp -premasked -verbose -nthreads 12
-
+labelsgmfix nodes.mif.gz T1_diff.nii.gz fs_default.txt nodes_fixSGM.mif.gz -sgm_amyg_hipp -premasked -verbose -nthreads 12
+############
 " >$CMD1
 prepid=`$code/fsl_sub_hpc_6 -l $hr/fs/log_mr -s pe,smp 12 $CMD1`
 
@@ -96,10 +97,7 @@ cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
 #bet2 lowb lowb_brain -m  
 #gzip -d -f -v mr_fod.mif.gz
 
-###########
-labelconvert ../mri/aparc+aseg_orient_diffusion_1mm.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_default.txt nodes.mif.gz
-labelsgmfix nodes.mif.gz T1_diff.nii.gz fs_default.txt nodes_fixSGM.mif -sgm_amyg_hipp -premasked -verbose -nthreads 12
-##########
+
 
 #tckgen WM_FODs.mif.gz 1M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -rk4 -seed_dynamic WM_FODs.mif.gz -maxlength 250 -number 1M -force -nthreads 12
 
@@ -113,12 +111,13 @@ else tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at
 tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads 12 && echo sift done*******
 fi 
 
-if [ -e r_track_10M_SIFT.tck ] ; then rm mr_track_100M.tck 
+if [ -e mr_track_10M_SIFT.tck ] ; then rm mr_track_100M.tck 
 else echo SIFT WAS NOT SUCCESSFUL
 fi
 
-tck2connectome -force -zero_diagonal -nthreads 12 mr_fod_5M_SIFT.tck mr_parcels.mif* mr_sift_5M_connectome.csv && cp mr_sift_5M_conn\
-ectome.csv $monk/data/connectome/sift_5M_connectome_${s}.csv
+tck2connectome -force -zero_diagonal -nthreads 12 mr_track_10M_SIFT.tck nodes_fixSGM.mif.gz mr_sift_10M_connectome_count.csv 
+tck2connectome -force -zero_diagonal -scale_length -stat_edge mean -nthreads 12 mr_track_10M_SIFT.tck nodes_fixSGM.mif.gz mr_sift_10M_connectome_length.csv 
+tck2connectome -force -zero_diagonal -scale_invnodevol -nthreads 12 mr_track_10M_SIFT.tck nodes_fixSGM.mif.gz mr_sift_10M_connectome_volumeadjusted.csv 
 
 echo END OF TCKGEN AND SIFT
 
