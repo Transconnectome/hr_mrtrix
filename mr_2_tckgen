@@ -5,7 +5,7 @@
 #rm $monk/data/cmd/jobid
 #cd $monk/analysis/newstr/roi
 
-for s in 10398; do # `cat /ifs/scratch/pimri/posnerlab/1anal/Monk/data/run8`; do
+for s in `cat /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/goodsubject.txt`; do
 
 #if [ ! -e $monk/analysis/dti/${s}/dmri/roi/infant-neo-aal_warped_diff.nii.gz ]; then 
 #template=$monk/template/infant-neo-withCerebellum.nii
