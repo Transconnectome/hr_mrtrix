@@ -30,8 +30,8 @@ mrconvert 5tt.mif.gz 5tt.nii.gz -force
 5tt2gmwmi 5tt.mif.gz 5tt_gmwmi_mask.mif.gz
 
 ############
-labelconvert ../mri/aparc+aseg_orient_diffusion_1mm.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_default.txt nodes.mif.gz
-labelsgmfix nodes.mif.gz T1_diff.nii.gz fs_default.txt nodes_fixSGM.mif.gz -sgm_amyg_hipp -premasked -verbose -nthreads 12
+labelconvert ../mri/aparc+aseg_orient_diffusion_1mm.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_default.txt nodes.mif.gz -force
+#labelsgmfix nodes.mif.gz T1_diff.nii.gz fs_default.txt nodes_fixSGM.mif.gz -sgm_amyg_hipp -premasked -verbose -nthreads 12
 ############
 " >$CMD1
 prepid=`$code/fsl_sub_hpc -T 60 -M 0.3G -l $hr/fs/log_mr -s smp,12 $CMD1`
@@ -116,9 +116,9 @@ if [ -e mr_track_10M_SIFT.tck ] ; then rm mr_track_100M.tck
 else echo SIFT WAS NOT SUCCESSFUL
 fi
 
-tck2connectome -force -zero_diagonal -nthreads 12 mr_track_10M_SIFT.tck nodes_fixSGM.mif.gz mr_sift_10M_connectome_count.csv 
-tck2connectome -force -zero_diagonal -scale_length -stat_edge mean -nthreads 12 mr_track_10M_SIFT.tck nodes_fixSGM.mif.gz mr_sift_10M_connectome_length.csv 
-tck2connectome -force -zero_diagonal -scale_invnodevol -nthreads 12 mr_track_10M_SIFT.tck nodes_fixSGM.mif.gz mr_sift_10M_connectome_volumeadjusted.csv 
+tck2connectome -force -zero_diagonal -nthreads 12 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_count.csv 
+tck2connectome -force -zero_diagonal -scale_length -stat_edge mean -nthreads 12 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_length.csv 
+tck2connectome -force -zero_diagonal -scale_invnodevol -nthreads 12 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_volumeadjusted.csv 
 
 echo END OF TCKGEN AND SIFT
 
