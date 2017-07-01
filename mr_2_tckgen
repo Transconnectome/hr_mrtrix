@@ -5,10 +5,11 @@
 #rm $monk/data/cmd/jobid
 #cd $monk/analysis/newstr/roi
 
+CMD1_batch=$hr/fs/log_mr/batch_5ttgen
+
 for s in `cat /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/goodsubject.txt`
 do
 
-CMD1_batch=$hr/fs/log_mr/batch_5ttgen
 ### 5TTGEN
 cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
 CMD1=$hr/fs/log_mr/cmd.5ttgen.${s}
