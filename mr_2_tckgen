@@ -6,6 +6,7 @@
 #cd $monk/analysis/newstr/roi
 
 CMD1_batch=$hr/fs/log_mr/batch_5ttgen
+rm -rf $CMD1_batch
 
 for s in `cat /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/goodsubject.txt`
 do
