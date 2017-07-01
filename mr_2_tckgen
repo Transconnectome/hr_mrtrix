@@ -38,7 +38,7 @@ labelconvert ../mri/aparc+aseg_orient_diffusion_1mm.nii.gz $FREESURFER_HOME/Free
 echo $CMD1 >> $CMD1_batch
 done
 
-#prepid=`$code/fsl_sub_hpc -T 60 -M 0.3G -l $hr/fs/log_mr -s smp,12 -t $CMD1`
+prepid=`$code/fsl_sub_hpc -T 60 -M 0.3G -l $hr/fs/log_mr -s smp,12 -t $CMD1`
 
 for s in `cat /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/goodsubject.txt`
 do
