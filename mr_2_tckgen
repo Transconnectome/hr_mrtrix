@@ -38,6 +38,8 @@ done
 
 #prepid=`$code/fsl_sub_hpc -T 60 -M 0.3G -l $hr/fs/log_mr -s smp,12 -t $CMD1`
 
+for s in `cat /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/goodsubject.txt`
+do
 CMD2=$hr/fs/log_mr/cmd.tckgensift.${s}
 rm -rf $CMD2
 
