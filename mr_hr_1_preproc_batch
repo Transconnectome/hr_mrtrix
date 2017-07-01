@@ -4,7 +4,7 @@
   CMD=/ifs/scratch/pimri/posnerlab/1anal/highrisk/code/hr_mrtrix/job/cmd.batch.1_preproc
   jobfolder=/ifs/scratch/pimri/posnerlab/1anal/highrisk/code/hr_mrtrix/job
   rm -rf $CMD
-  for order in `seq 1 1 80`
+  for order in `seq 81 1 125`
   do
   echo 'matlab -nojvm -nodesktop -r "mr_hr_1_preproc('${order}')'\" >> $CMD
   done
