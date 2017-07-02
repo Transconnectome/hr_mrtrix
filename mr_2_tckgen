@@ -5,8 +5,8 @@ CMD1_batch=$hr/fs/log_mr/batch_5ttgen
 CMD2_batch=$hr/fs/log_mr/batch_tckgen
 
 rm -rf $CMD1_batch
-
-for s in `cat /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/subject_batch${1}`
+subjectlist=/ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/subject_batch${1}
+for s in `cat $subjectlist`
 do
 
 ### 5TTGEN
