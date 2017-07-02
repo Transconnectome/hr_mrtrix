@@ -1,14 +1,12 @@
 #! /bin/bash
-#cd $monk/analysis/newstr/roi
-#mkdir $monk/data/cmd
-#rm $monk/data/cmd/cmd2_*
-#rm $monk/data/cmd/jobid
-#cd $monk/analysis/newstr/roi
+#usage: mr_2_tckgen 1
 
 CMD1_batch=$hr/fs/log_mr/batch_5ttgen
+CMD2_batch=$hr/fs/log_mr/batch_tckgen
+
 rm -rf $CMD1_batch
 
-for s in `cat /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/goodsubject.txt`
+for s in `cat /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/subject_batch${1}`
 do
 
 ### 5TTGEN
@@ -137,12 +135,13 @@ echo END OF TCKGEN AND SIFT
 #### GENERATING CONNECTOME
 
 " > $CMD2
+echo $CMD2 >> $CMD2_batch
 
 chmod +x $CMD2
 #$code/fsl_sub_hpc_6 -s smp,12 -j $prepid -l $hr/fs/log_mr $CMD2
 #$code/fsl_sub_hpc_36 $monk/data/cmd/cmd2_${s}  
 #echo $jobid >> $monk/data/cmd/jobid
-#$code/fsl_sub_hpc_3 -N connectome -s smp,12 -j $prepid -l $hr/fs/log_mr $CMD2 
+$code/fsl_sub_hpc_3 -N connectome -s smp,12 -j $prepid -l $hr/fs/log_mr $CMD2 
 
   
 #fi
