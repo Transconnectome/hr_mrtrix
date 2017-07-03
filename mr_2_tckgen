@@ -116,7 +116,7 @@ do
 
 
 #-seed_image mr_parcels.mif* -mask lowb_brain_mask.nii.gz -number 100M -maxlength 100 -force -nthreads 12 && echo tckgen done***************
-      tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads 12 && echo sift done*******
+      tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads 12 && echo 'sift done'*******
       fi 
 
       if [ -e mr_track_10M_SIFT.tck ] ; then rm mr_track_100M.tck 
