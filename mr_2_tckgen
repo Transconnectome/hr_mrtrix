@@ -1,13 +1,27 @@
 #! /bin/bash
 #usage: mr_2_tckgen 1
+while [ $1 != -- ] ; do
+  case $1 in
+    -threads)
+      nthreads=$2;
+      shift;;
+    -batch)
+      nbatch=$2;
+      shift;;
+   esac
+done
+shift
 
-CMD1_batch=$hr/fs/log_mr/batch_${1}_5ttgen
-CMD2_batch=$hr/fs/log_mr/batch_${1}_tckgen
+CMD1_batch=$hr/fs/log_mr/batch_${nbatch}_5ttgen
+CMD2_batch=$hr/fs/log_mr/batch_${nbatch}_tckgen
 
 rm -rf $CMD1_batch
 rm -rf $CMD2_batch
 
-subjectlist=/ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/subject_batch${1}
+nthreadsX2=echo "$((${nbatch}*2))"
+
+
+subjectlist=/ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/subject_batch${nbatch}
 for s in `cat $subjectlist`
 do
 
@@ -23,7 +37,7 @@ mri_convert ../mri/T1.mgz tmp.nii.gz
 flip4fsl tmp.nii.gz T1_flip.nii.gz
 mrconvert mr_meanb0.mif.gz mr_meanb0.nii.gz
 flirt -in T1_flip.nii.gz -out T1_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -v
-5ttgen fsl T1_diff.nii.gz 5tt.mif.gz -force -nthreads 12
+5ttgen fsl T1_diff.nii.gz 5tt.mif.gz -force -nthreads $nthreadsX2
 mrconvert 5tt.mif.gz 5tt.nii.gz -force
 5tt2gmwmi 5tt.mif.gz 5tt_gmwmi_mask.mif.gz
 
@@ -38,7 +52,7 @@ labelconvert ../mri/aparc+aseg_orient_diffusion_1mm.nii.gz $FREESURFER_HOME/Free
 echo $CMD1 >> $CMD1_batch
 done
 
-prepid=`$code/fsl_sub_hpc -T 60 -M 0.3G -l $hr/fs/log_mr -s smp,12 -t $CMD1_batch`
+prepid=`$code/fsl_sub_hpc -T 60 -M 0.3G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
 
 subjectlist=/ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/subject_batch${1}
 for s in `cat $subjectlist`
@@ -48,7 +62,7 @@ do
 
    echo "#!/bin/bash
    source ~/.bashrc
-   export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=12
+   export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=`echo $nthreadsX2`
    echo NOW WARPING FOR SUBJECT ${s}
 #cd /ifs/scratch/pimri/posnerlab/1anal/Monk/fs_new/${s}/dmri
 #ref=/ifs/scratch/pimri/posnerlab/1anal/Monk/template/infant-neo-withCerebellum.nii
@@ -112,20 +126,20 @@ do
 
 #dwi2fod csd mr_dwi_denoised_preproc_biasCorr_reduced.mif* ../../group_average_response.txt mr_fod_group_response.mif.gz -mask mr_dilate_mask.mif -force
       if [ -e mr_track_10M_SIFT.tck ] ; then echo "SIFT is already done"
-      else tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -minlength 30 -number 100M -force -nthreads 12
+      else tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -minlength 30 -number 100M -force -nthreads $nthreadsX2
 
 
 #-seed_image mr_parcels.mif* -mask lowb_brain_mask.nii.gz -number 100M -maxlength 100 -force -nthreads 12 && echo tckgen done***************
-      tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads 12 && echo 'sift done'*******
+      tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads $nthreadsX2 && echo 'sift done'*******
       fi 
 
       if [ -e mr_track_10M_SIFT.tck ] ; then rm mr_track_100M.tck 
       else echo SIFT WAS NOT SUCCESSFUL
       fi
 
-tck2connectome -force -zero_diagonal -nthreads 12 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_count.csv 
-tck2connectome -force -zero_diagonal -scale_length -stat_edge mean -nthreads 12 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_length.csv 
-tck2connectome -force -zero_diagonal -scale_invnodevol -nthreads 12 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_volumeadjusted.csv 
+tck2connectome -force -zero_diagonal -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_count.csv 
+tck2connectome -force -zero_diagonal -scale_length -stat_edge mean -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_length.csv 
+tck2connectome -force -zero_diagonal -scale_invnodevol -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_volumeadjusted.csv 
 
 echo "END OF TCKGEN AND SIFT"
 
@@ -146,7 +160,7 @@ done
 #$code/fsl_sub_hpc_6 -s smp,12 -j $prepid -l $hr/fs/log_mr $CMD2
 #$code/fsl_sub_hpc_36 $monk/data/cmd/cmd2_${s}  
 #echo $jobid >> $monk/data/cmd/jobid
-$code/fsl_sub_hpc_3 -N connectome -s smp,12 -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}
+$code/fsl_sub_hpc_3 -N connectome -s smp,$nbatch -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}
 
   
 #fi
