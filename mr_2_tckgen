@@ -55,7 +55,8 @@ labelconvert ../mri/aparc+aseg_orient_diffusion_1mm.nii.gz $FREESURFER_HOME/Free
 echo $CMD1 >> $CMD1_batch
 done
 
-prepid=`$code/fsl_sub_hpc -T 60 -M 0.3G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
+#prepid=`$code/fsl_sub_hpc -T 60 -M 0.3G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
+echo "$code/fsl_sub_hpc -T 60 -M 0.3G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch"
 
 subjectlist=/ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/subject_batch${1}
 for s in `cat $subjectlist`
@@ -163,7 +164,8 @@ done
 #$code/fsl_sub_hpc_6 -s smp,12 -j $prepid -l $hr/fs/log_mr $CMD2
 #$code/fsl_sub_hpc_36 $monk/data/cmd/cmd2_${s}  
 #echo $jobid >> $monk/data/cmd/jobid
-$code/fsl_sub_hpc_3 -N connectome -s smp,$nbatch -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}
+
+echo "$code/fsl_sub_hpc_3 -N connectome -s smp,$nbatch -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}"
 
   
 #fi
