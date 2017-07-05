@@ -56,7 +56,7 @@ echo $CMD1 >> $CMD1_batch
 done
 
 #prepid=`$code/fsl_sub_hpc -T 60 -M 0.3G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
-echo "$code/fsl_sub_hpc -T 60 -M 2G -l $hr/fs/log_mr -s smp,$nthreads -t $CMD1_batch"
+$code/fsl_sub_hpc -T 60 -M 2G -l $hr/fs/log_mr -s smp,$nthreads -t $CMD1_batch
 
 for s in `cat $subjectlist`
 do
@@ -164,7 +164,7 @@ done
 #$code/fsl_sub_hpc_36 $monk/data/cmd/cmd2_${s}  
 #echo $jobid >> $monk/data/cmd/jobid
 
-echo "$code/fsl_sub_hpc_6 -N connectome -s smp,$nthreads -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}"
+$code/fsl_sub_hpc_6 -N connectome -s smp,$nthreads -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}
 
   
 #fi
