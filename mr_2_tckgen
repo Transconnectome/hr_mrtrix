@@ -21,7 +21,7 @@ CMD2_batch=$hr/fs/log_mr/batch_${nbatch}_tckgen
 rm -rf $CMD1_batch
 rm -rf $CMD2_batch
 
-nthreadsX2=$((${nbatch}*2))
+nthreadsX2=$((${nthreads}*2))
 
 
 subjectlist=/ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/subject_batch${nbatch}
