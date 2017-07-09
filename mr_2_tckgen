@@ -77,14 +77,16 @@ tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwm
 
 tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads $nthreadsX2 && echo 'sift done'*******
 
-      if [ -e mr_track_10M_SIFT.tck ] ; then rm mr_track_100M.tck 
-      else echo SIFT WAS NOT SUCCESSFUL
-      fi
+
 
 tck2connectome -force -zero_diagonal -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_count.csv 
 tck2connectome -force -zero_diagonal -scale_length -stat_edge mean -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_length.csv 
 tck2connectome -force -zero_diagonal -scale_invnodevol -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_volumeadjusted.csv 
 
+      if [ -e mr_sift_10M_connectome_count.csv ] ; then rm mr_track_100M.tck 
+      else echo SIFT WAS NOT SUCCESSFUL
+      fi
+      
 echo "END OF TCKGEN AND SIFT"
 
 " > $CMD2
