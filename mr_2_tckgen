@@ -66,74 +66,16 @@ do
    source ~/.bashrc
    export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=`echo $nthreadsX2`
    echo NOW WARPING FOR SUBJECT ${s}
-#cd /ifs/scratch/pimri/posnerlab/1anal/Monk/fs_new/${s}/dmri
-#ref=/ifs/scratch/pimri/posnerlab/1anal/Monk/template/infant-neo-withCerebellum.nii
 
 
    cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
 
-### FREE UP SOME SPACE
-
-## FREEING UP SOME SPACE
-#gzip -f -v *mif 
-#rm -f mr_fod_tckgen_*.tck
 
 
+rm -rf mr_track_100M.tck
+tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -minlength 30 -number 100M -force -nthreads $nthreadsX2
 
-#if [ -e /ifs/scratch/pimri/posnerlab/1anal/Monk/analysis/newstr/vbm/struc/${s}_str_nu_brain.nii.gz ] ; then 
-   
-## step1. mni to str
-#imcp /ifs/scratch/pimri/posnerlab/1anal/Monk/analysis/newstr/vbm/struc/${s}_str_nu_brain.nii.gz  ./str.nii.gz
-#imcp /ifs/scratch/pimri/posnerlab/1anal/Monk/template/infant-neo-withCerebellum.nii ./mni.nii && gzip -f mni.nii
-#imcp /ifs/scratch/pimri/posnerlab/1anal/Monk/template/infant-neo-aal.nii ./mni_aal.nii && gzip -f mni_aal.nii
-
-#ANTS 3 -m PR[str.nii.gz,mni.nii.gz,1,2] -i 50x20x10 -o mni2str_synants.nii.gz -t SyN[0.3] -r Gauss[3,0]
-
-#WarpImageMultiTransform 3 mni.nii.gz mni2str_warped_synants.nii.gz -R str.nii.gz mni2str_synantsWarp.nii.gz mni2str_synantsAffine.txt
-#WarpImageMultiTransform 3 mni_aal.nii.gz mni_aal2str_synants.nii.gz -R str.nii.gz mni2str_synantsWarp.nii.gz mni2str_synantsAffine.txt --use-NN
-
-
-## step2. str to diff
-#ANTS 3 -m PR[lowb_brain.nii.gz,str.nii.gz,1,2] -i 50x20x10 -o str2diff_synants.nii.gz -t SyN[0.3] -r Gauss[3,0]
-#WarpImageMultiTransform 3 str.nii.gz str2diff_warped_synants.nii.gz -R lowb_brain.nii.gz str2diff_synantsWarp.nii.gz str2diff_synantsAffine.txt
-#WarpImageMultiTransform 3 mni_aal2str_synants.nii.gz mni_aal2diff_warped_synants.nii.gz -R lowb_brain.nii.gz str2diff_synantsWarp.nii.gz str2diff_synantsAffine.txt --use-NN
-
-
-## step3. MNI2DIFF
-## ALTERNATIVE MNI2DIFF
-#ANTS 3 -m PR[lowb_brain.nii.gz,mni.nii.gz,1,2] -i 100x100x20 -o mni2diff_synants.nii.gz -t SyN[0.3] -r Gauss[2,0]
-#WarpImageMultiTransform 3 mni.nii.gz mni2diff_warped_synants.nii.gz -R lowb_brain.nii.gz mni2diff_synantsWarp.nii.gz mni2diff_synantsAffine.txt
-#WarpImageMultiTransform 3 mni_aal.nii.gz mni_aal2diff_warped_synants.nii.gz -R lowb_brain.nii.gz mni2diff_synantsWarp.nii.gz mni2diff_synantsAffine.txt --use-NN
-
-
-#flirt -in mni -ref lowb_brain -out mni2diff_flirt -omat mni2diff.mat -v
-#flirt -in mni_aal -ref lowb_brain -out mni_aal2diff_flirt -applyxfm -init mni2diff.mat -v -interp nearestneighbour
-
-#ANTS 3 -m PR[lowb_brain.nii.gz,mni2diff_flirt,1,2] -i 100x100x20 -o mni2diff_synants.nii.gz -t SyN[0.3] -r Gauss[2,0]
-#WarpImageMultiTransform 3 mni2diff_flirt.nii.gz mni2diff_warped_synants.nii.gz -R lowb_brain.nii.gz mni2diff_synantsWarp.nii.gz mni2diff_synantsAffine.txt
-#WarpImageMultiTransform 3 mni_aal2diff_flirt.nii.gz mni_aal2diff_warped_synants.nii.gz -R lowb_brain.nii.gz mni2diff_synantsWarp.nii.gz mni2diff_synantsAffine.txt --use-NN
-
-#else echo no good str exist. use the atlas
-
-#fi
-
-#labelconvert mni_aal2diff_warped_synants.nii.gz $monk/data/mr_roi_lut.txt $monk/data/mr_roi_lut.txt mr_parcels.mif -nthreads 12 -force
-#bet2 lowb lowb_brain -m  
-#gzip -d -f -v mr_fod.mif.gz
-
-
-
-#tckgen WM_FODs.mif.gz 1M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -rk4 -seed_dynamic WM_FODs.mif.gz -maxlength 250 -number 1M -force -nthreads 12
-
-
-#dwi2fod csd mr_dwi_denoised_preproc_biasCorr_reduced.mif* ../../group_average_response.txt mr_fod_group_response.mif.gz -mask mr_dilate_mask.mif -force
-      if [ -e mr_track_10M_SIFT.tck ] ; then echo "SIFT is already done"
-      else tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -minlength 30 -number 100M -force -nthreads $nthreadsX2
-
-
-#-seed_image mr_parcels.mif* -mask lowb_brain_mask.nii.gz -number 100M -maxlength 100 -force -nthreads 12 && echo tckgen done***************
-      tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads $nthreadsX2 && echo 'sift done'*******
-      fi 
+tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads $nthreadsX2 && echo 'sift done'*******
 
       if [ -e mr_track_10M_SIFT.tck ] ; then rm mr_track_100M.tck 
       else echo SIFT WAS NOT SUCCESSFUL
@@ -144,14 +86,6 @@ tck2connectome -force -zero_diagonal -scale_length -stat_edge mean -nthreads $nt
 tck2connectome -force -zero_diagonal -scale_invnodevol -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_volumeadjusted.csv 
 
 echo "END OF TCKGEN AND SIFT"
-
-#gzip -f -v mr_fod_3M_SIFT.tck 
-#gzip -f -v mr_fod.mif
-
-
-
-
-#### GENERATING CONNECTOME
 
 " > $CMD2
 echo $CMD2 >> $CMD2_batch
