@@ -46,14 +46,18 @@ mrconvert 5tt.mif.gz 5tt.nii.gz -force
 
 
 ### APARC+ASEG to diff
-im=aparc+aseg
+for im in aparc+aseg aparc.a2009s+aseg
+do
 mri_convert ../mri/${im}.mgz ${im}.nii.gz
 flip4fsl ${im}.nii.gz ${im}_flip.nii.gz
-flirt -in ${im}_flip.nii.gz -out ${im}_flip_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -v
+flirt -in ${im}_flip.nii.gz -out ${im}_flip_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -interp nearestneighbour -v 
+
 
 ############
-labelconvert ../mri/aparc+aseg_orient_diffusion_1mm.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_default.txt nodes.mif.gz -force
+labelconvert ${im}_flip_diff.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_default.txt nodes_${im}.mif.gz -force
 #labelsgmfix nodes.mif.gz T1_diff.nii.gz fs_default.txt nodes_fixSGM.mif.gz -sgm_amyg_hipp -premasked -verbose -nthreads 12
+done
+
 ############
 " >$CMD1
 
@@ -85,12 +89,16 @@ tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwm
 tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads $nthreadsX2 && echo 'sift done'*******
 
 
+for im in aparc+aseg aparc.a2009s+aseg
+do
 
-tck2connectome -force -zero_diagonal -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_count.csv 
-tck2connectome -force -zero_diagonal -scale_length -stat_edge mean -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_length.csv 
-tck2connectome -force -zero_diagonal -scale_invnodevol -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes.mif.gz mr_sift_10M_connectome_volumeadjusted.csv 
+tck2connectome -force -zero_diagonal -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes_${im}.mif.gz mr_sift_10M_connectome_${im}_count.csv 
+tck2connectome -force -zero_diagonal -scale_length -stat_edge mean -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes_${im}.mif.gz mr_sift_10M_connectome_${im}_length.csv 
+tck2connectome -force -zero_diagonal -scale_invnodevol -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes_${im}.mif.gz mr_sift_10M_connectome_${im}_volumeadj.csv 
+done
 
-      if [ -e mr_sift_10M_connectome_count.csv ] ; then rm mr_track_100M.tck 
+### save scratch space
+      if [ -e mr_sift_10M_connectome_aparc+aseg_count.csv ] ; then rm mr_track_100M.tck 
       else echo SIFT WAS NOT SUCCESSFUL
       fi
       
