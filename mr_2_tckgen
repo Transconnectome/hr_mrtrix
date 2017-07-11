@@ -1,12 +1,6 @@
 #! /bin/bash
-usage ()
-{
-  cat <<EOF
-mr_2_tckgen -threads 6 -batch 1
-EOF
+## usage: mr_2_tckgen -threads 6 -batch 1
 
-  exit 1
-}
 
 while [ $1 != -- ] ; do
   case $1 in
