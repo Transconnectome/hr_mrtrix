@@ -48,13 +48,13 @@ mrconvert 5tt.mif.gz 5tt.nii.gz -force
 ### APARC+ASEG to diff
 for im in aparc+aseg aparc.a2009s+aseg
 do
-mri_convert ../mri/${im}.mgz ${im}.nii.gz
-flip4fsl ${im}.nii.gz ${im}_flip.nii.gz
-flirt -in ${im}_flip.nii.gz -out ${im}_flip_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -interp nearestneighbour -v 
+mri_convert ../mri/\${im}.mgz \${im}.nii.gz
+flip4fsl \${im}.nii.gz \${im}_flip.nii.gz
+flirt -in \${im}_flip.nii.gz -out \${im}_flip_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -interp nearestneighbour -v 
 
 
 ############
-labelconvert ${im}_flip_diff.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_default.txt nodes_${im}.mif.gz -force
+labelconvert \${im}_flip_diff.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_default.txt nodes_${im}.mif.gz -force
 #labelsgmfix nodes.mif.gz T1_diff.nii.gz fs_default.txt nodes_fixSGM.mif.gz -sgm_amyg_hipp -premasked -verbose -nthreads 12
 done
 
@@ -66,7 +66,7 @@ done
 echo $CMD1 >> $CMD1_batch
 done
 
-prepid=`$code/fsl_sub_hpc -T 60 -M 2G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
+#prepid=`$code/fsl_sub_hpc -T 60 -M 2G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
 
 for s in `cat $subjectlist`
 do
@@ -114,7 +114,7 @@ done
 #$code/fsl_sub_hpc_36 $monk/data/cmd/cmd2_${s}  
 #echo $jobid >> $monk/data/cmd/jobid
 
-$code/fsl_sub_hpc_6 -N connectome -s smp,$nthreads -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}
+#$code/fsl_sub_hpc_6 -N connectome -s smp,$nthreads -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}
 
   
 #fi
