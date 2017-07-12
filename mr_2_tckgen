@@ -66,7 +66,7 @@ done
 echo $CMD1 >> $CMD1_batch
 done
 
-#prepid=`$code/fsl_sub_hpc -T 60 -M 2G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
+prepid=`$code/fsl_sub_hpc -T 60 -M 2G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
 
 for s in `cat $subjectlist`
 do
@@ -92,9 +92,9 @@ tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -
 for im in aparc+aseg aparc.a2009s+aseg
 do
 
-tck2connectome -force -zero_diagonal -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes_${im}.mif.gz mr_sift_10M_connectome_${im}_count.csv 
-tck2connectome -force -zero_diagonal -scale_length -stat_edge mean -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes_${im}.mif.gz mr_sift_10M_connectome_${im}_length.csv 
-tck2connectome -force -zero_diagonal -scale_invnodevol -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes_${im}.mif.gz mr_sift_10M_connectome_${im}_volumeadj.csv 
+tck2connectome -force -zero_diagonal -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes_\${im}.mif.gz mr_sift_10M_connectome_\${im}_count.csv 
+tck2connectome -force -zero_diagonal -scale_length -stat_edge mean -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes_\${im}.mif.gz mr_sift_10M_connectome_\${im}_length.csv 
+tck2connectome -force -zero_diagonal -scale_invnodevol -nthreads $nthreadsX2 mr_track_10M_SIFT.tck nodes_\${im}.mif.gz mr_sift_10M_connectome_\${im}_volumeadj.csv 
 done
 
 ### save scratch space
@@ -114,7 +114,7 @@ done
 #$code/fsl_sub_hpc_36 $monk/data/cmd/cmd2_${s}  
 #echo $jobid >> $monk/data/cmd/jobid
 
-#$code/fsl_sub_hpc_6 -N connectome -s smp,$nthreads -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}
+$code/fsl_sub_hpc_6 -N connectome -s smp,$nthreads -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}
 
   
 #fi
