@@ -84,9 +84,9 @@ do
 
 
 rm -rf mr_track_100M.tck
-tckgen WM_FODs.mif.gz mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -minlength 30 -number 100M -force -nthreads $nthreadsX2
+tckgen WM_FODs.mif.gz /tmp/mr_track_100M.tck -act 5tt.mif.gz -backtrack -crop_at_gmwmi -seed_dynamic WM_FODs.mif.gz -maxlength 250 -minlength 30 -number 100M -force -nthreads $nthreadsX2
 
-tcksift -act 5tt.mif.gz mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads $nthreadsX2 && echo 'sift done'*******
+tcksift -act 5tt.mif.gz /tmp/mr_track_100M.tck WM_FODs.mif.gz mr_track_10M_SIFT.tck -term_number 10M -force -nthreads $nthreadsX2 && echo 'sift done'*******
 
 
 for im in aparc+aseg aparc.a2009s+aseg
