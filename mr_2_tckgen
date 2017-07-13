@@ -38,7 +38,7 @@ FREESURFER_HOME=$work/freesurfer_dev/freesurfer
 source /ifs/scratch/pimri/posnerlab/freesurfer_dev/freesurfer/FreeSurferEnv.sh
 mri_convert ../mri/T1.mgz tmp.nii.gz
 flip4fsl tmp.nii.gz T1_flip.nii.gz
-mrconvert mr_meanb0.mif.gz mr_meanb0.nii.gz
+mrconvert mr_meanb0.mif.gz mr_meanb0.nii.gz -force
 flirt -in T1_flip.nii.gz -out T1_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -v
 5ttgen fsl T1_diff.nii.gz 5tt.mif.gz -force -nthreads $nthreadsX2
 mrconvert 5tt.mif.gz 5tt.nii.gz -force
