@@ -66,7 +66,7 @@ done
 echo $CMD1 >> $CMD1_batch
 done
 
-prepid=`$code/fsl_sub_hpc -T 60 -M 2G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
+prepid=`$code/fsl_sub_hpc -T 60 -M 6G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
 
 for s in `cat $subjectlist`
 do
