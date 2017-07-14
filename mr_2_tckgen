@@ -28,14 +28,20 @@ subjectlist=/ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/subject_batch${nbatch
 for s in `cat $subjectlist`
 do
 
-### 5TTGEN
+
+
 cd /ifs/scratch/pimri/posnerlab/1anal/highrisk/fs/${s}/dmri2
 CMD1=$hr/fs/log_mr/cmd.5ttgen.${s}
 rm -rf $CMD1
+
 echo "#!/bin/bash
 source ~/.bashrc
 FREESURFER_HOME=$work/freesurfer_dev/freesurfer
 source /ifs/scratch/pimri/posnerlab/freesurfer_dev/freesurfer/FreeSurferEnv.sh
+
+
+### 5TTGEN
+if [ ! -e 5tt.nii.gz ]; then
 mri_convert ../mri/T1.mgz tmp.nii.gz
 $FREESURFER_HOME/bin/flip4fsl tmp.nii.gz T1_flip.nii.gz
 mrconvert mr_meanb0.mif.gz mr_meanb0.nii.gz -force
@@ -43,18 +49,17 @@ flirt -in T1_flip.nii.gz -out T1_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -in
 5ttgen fsl T1_diff.nii.gz 5tt.mif.gz -force -nthreads $nthreadsX2
 mrconvert 5tt.mif.gz 5tt.nii.gz -force
 5tt2gmwmi 5tt.mif.gz 5tt_gmwmi_mask.mif.gz
-
+fi
 
 ### APARC+ASEG to diff
 for im in aparc+aseg aparc.a2009s+aseg
 do
 mri_convert ../mri/\${im}.mgz \${im}.nii.gz
-flip4fsl \${im}.nii.gz \${im}_flip.nii.gz
+$FREESURFER_HOME/bin/flip4fsl \${im}.nii.gz \${im}_flip.nii.gz
 flirt -in \${im}_flip.nii.gz -out \${im}_flip_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -interp nearestneighbour -v 
-
-
-############
 done
+
+### labelconvert for aparc+aseg and aparc.a2009+aseg
 labelconvert aparc+aseg_flip_diff.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_default.txt nodes_aparc+aseg.mif.gz -force
 labelconvert aparc.a2009s+aseg_flip_diff.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_a2009s.txt nodes_aparc.a2009s+aseg.mif.gz -force
 
