@@ -43,11 +43,22 @@ source /ifs/scratch/pimri/posnerlab/freesurfer_dev/freesurfer/FreeSurferEnv.sh
 ### 5TTGEN
 if [ ! -e 5tt.nii.gz ]; then
 mri_convert ../mri/T1.mgz tmp.nii.gz
+sleep 5
+
 /ifs/scratch/pimri/posnerlab/freesurfer_dev/freesurfer/bin/flip4fsl tmp.nii.gz T1_flip.nii.gz
+sleep 5
+
 mrconvert mr_meanb0.mif.gz mr_meanb0.nii.gz -force
+sleep 5
+
 flirt -in T1_flip.nii.gz -out T1_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -v
+sleep 10
+
 5ttgen fsl T1_diff.nii.gz 5tt.mif.gz -force -nthreads $nthreadsX2
+
 mrconvert 5tt.mif.gz 5tt.nii.gz -force
+sleep 5
+
 5tt2gmwmi 5tt.mif.gz 5tt_gmwmi_mask.mif.gz
 fi
 
@@ -56,12 +67,15 @@ for im in aparc+aseg aparc.a2009s+aseg
 do
 echo ****NOW CONVERTING MGZ TO NII
 mri_convert ../mri/\${im}.mgz \${im}.nii.gz
+sleep 5
 
-ECHO ****FLIPING FOR FSL
+echo ****FLIPING FOR FSL
 /ifs/scratch/pimri/posnerlab/freesurfer_dev/freesurfer/bin/flip4fsl \${im}.nii.gz \${im}_flip.nii.gz
+sleep 5
 
-ECHO ****NOW FLIRTING
+echo ****NOW FLIRTING
 flirt -in \${im}_flip.nii.gz -out \${im}_flip_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -interp nearestneighbour -v 
+sleep 5
 done
 
 ### labelconvert for aparc+aseg and aparc.a2009+aseg
