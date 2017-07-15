@@ -54,8 +54,13 @@ fi
 ### APARC+ASEG to diff
 for im in aparc+aseg aparc.a2009s+aseg
 do
+echo ****NOW CONVERTING MGZ TO NII
 mri_convert ../mri/\${im}.mgz \${im}.nii.gz
+
+ECHO ****FLIPING FOR FSL
 /ifs/scratch/pimri/posnerlab/freesurfer_dev/freesurfer/bin/flip4fsl \${im}.nii.gz \${im}_flip.nii.gz
+
+ECHO ****NOW FLIRTING
 flirt -in \${im}_flip.nii.gz -out \${im}_flip_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -interp nearestneighbour -v 
 done
 
