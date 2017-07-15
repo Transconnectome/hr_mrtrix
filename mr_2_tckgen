@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 ## usage: mr_2_tckgen -t 6 -b 1
 
 
