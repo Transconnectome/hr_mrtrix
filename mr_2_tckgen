@@ -92,7 +92,7 @@ labelconvert aparc.a2009s+aseg_flip_diff.nii.gz $FREESURFER_HOME/FreeSurferColor
 echo $CMD1 >> $CMD1_batch
 done
 
-#prepid=`$code/fsl_sub_hpc -T 60 -M 6G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
+prepid=`$code/fsl_sub_hpc -T 60 -M 6G -l $hr/fs/log_mr -s smp,$nbatch -t $CMD1_batch`
 
 for s in `cat $subjectlist`
 do
@@ -151,10 +151,5 @@ done
 #$code/fsl_sub_hpc_36 $monk/data/cmd/cmd2_${s}  
 #echo $jobid >> $monk/data/cmd/jobid
 
-#$code/fsl_sub_hpc_6 -N connectome -s smp,$nthreads -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}
+$code/fsl_sub_hpc_6 -N connectome -s smp,$nthreads -j $prepid -l $hr/fs/log_mr -t ${CMD2_batch}
 
-  
-#fi
-#echo "cd $monk/analysis/dti/${s}/dmri && convert_xfm -omat mni2diff.mat -concat str2diff.mat mni2str.mat && convert_xfm -omat diff2mni.mat -inverse mni2diff.mat" >> $monk/cmd
-#cd $monk
-#$code/fsl_sub_hpc_6 -T 1440 -N warp -t $monk/cmd
