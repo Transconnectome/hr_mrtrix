@@ -2,7 +2,7 @@
 ## usage: mr_2_tckgen -t 6 -b 1
 
 
-while [ $1 != -- ] ; do
+while [ $1 -ne -- ] ; do
   case $1 in
     -t)
       nthreads=$2;
@@ -43,21 +43,21 @@ source /ifs/scratch/pimri/posnerlab/freesurfer_dev/freesurfer/FreeSurferEnv.sh
 ### 5TTGEN
 if [ ! -e 5tt.nii.gz ]; then
 mri_convert ../mri/T1.mgz tmp.nii.gz
-sleep 5
+while [ ! -e tmp.nii.gz ]; do sleep 1; done
 
 /ifs/scratch/pimri/posnerlab/freesurfer_dev/freesurfer/bin/flip4fsl tmp.nii.gz T1_flip.nii.gz
-sleep 5
+while [ ! -e T1_flip.nii.gz ]; do sleep 1; done
 
 mrconvert mr_meanb0.mif.gz mr_meanb0.nii.gz -force
-sleep 5
+while [ ! -e mr_meanb0.nii.gz ]; do sleep 1; done
 
 flirt -in T1_flip.nii.gz -out T1_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -v
-sleep 10
+while [ ! -e T1_diff.nii.gz ]; do sleep 1; done
 
 5ttgen fsl T1_diff.nii.gz 5tt.mif.gz -force -nthreads $nthreadsX2
 
 mrconvert 5tt.mif.gz 5tt.nii.gz -force
-sleep 5
+while [ ! -e 5tt.nii.gz ]; do sleep 1; done
 
 5tt2gmwmi 5tt.mif.gz 5tt_gmwmi_mask.mif.gz
 fi
@@ -67,15 +67,15 @@ for im in aparc+aseg aparc.a2009s+aseg
 do
 echo ****NOW CONVERTING MGZ TO NII
 mri_convert ../mri/\${im}.mgz \${im}.nii.gz
-while [ !-e \${im}.nii.gz ]; do sleep 1; done
+while [ ! -e \${im}.nii.gz ]; do sleep 1; done
 
 echo ****FLIPING FOR FSL
 /ifs/scratch/pimri/posnerlab/freesurfer_dev/freesurfer/bin/flip4fsl \${im}.nii.gz \${im}_flip.nii.gz
-while [ !-e \${im}_flip.nii.gz ]; do sleep 1; done
+while [ ! -e \${im}_flip.nii.gz ]; do sleep 1; done
 
 echo ****NOW FLIRTING
 flirt -in \${im}_flip.nii.gz -out \${im}_flip_diff.nii.gz -ref mr_meanb0.nii.gz -applyxfm -init ../dmri/xfms/anat2diff.flt.mat -interp nearestneighbour -v 
-while [ !-e \${im}_flip_diff.nii.gz ]; do sleep 1; done
+while [ ! -e \${im}_flip_diff.nii.gz ]; do sleep 1; done
 done
 
 ### labelconvert for aparc+aseg and aparc.a2009+aseg
