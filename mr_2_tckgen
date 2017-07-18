@@ -94,7 +94,8 @@ while [ ! -e nodes_aparc.a2009s+aseg.mif.gz ]; do sleep 1; done
 echo $CMD1 >> $CMD1_batch
 done
 
-prepid=`$code/fsl_sub_hpc -T 60 -M 6G -l $hr/fs/log_mr -s smp,$nthreadsX2 -t $CMD1_batch`
+#prepid=`$code/fsl_sub_hpc -T 60 -M 6G -l $hr/fs/log_mr -s smp,$nthreadsX2 -t $CMD1_batch`
+prepid=`$code/fsl_sub_hpc_3 -s smp,$nthreads -l $hr/fs/log_mr -t ${CMD1_batch}`
 
 for s in `cat $subjectlist`
 do
