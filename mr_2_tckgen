@@ -80,9 +80,9 @@ done
 
 ### labelconvert for aparc+aseg and aparc.a2009+aseg
 labelconvert aparc+aseg_flip_diff.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_default.txt nodes_aparc+aseg.mif.gz -force
-hile [ ! -e nodes_aparc+aseg.mif.gz ]; do sleep 1; done
+while [ ! -e nodes_aparc+aseg.mif.gz ]; do sleep 1; done
 labelconvert aparc.a2009s+aseg_flip_diff.nii.gz $FREESURFER_HOME/FreeSurferColorLUT.txt /ifs/scratch/pimri/posnerlab/app/mrtrix3/src/connectome/tables/fs_a2009s.txt nodes_aparc.a2009s+aseg.mif.gz -force
-hile [ ! -e nodes_aparc.a2009s+aseg.mif.gz ]; do sleep 1; done
+while [ ! -e nodes_aparc.a2009s+aseg.mif.gz ]; do sleep 1; done
 
 #labelsgmfix nodes.mif.gz T1_diff.nii.gz fs_default.txt nodes_fixSGM.mif.gz -sgm_amyg_hipp -premasked -verbose -nthreads 12
 
