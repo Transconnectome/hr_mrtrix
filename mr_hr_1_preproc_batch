@@ -10,4 +10,4 @@
   done
   
   cat $CMD
-  $code/fsl_sub_hpc -T 120 -M 12G -t $CMD -l $jobfolder
+  $code/fsl_sub_hpc_24 -l $jobfolder -t $CMD 
